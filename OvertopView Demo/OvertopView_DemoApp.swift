@@ -19,7 +19,7 @@ import SwiftUI
 struct OvertopView_DemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            DemoView()
         }
     }
 }
