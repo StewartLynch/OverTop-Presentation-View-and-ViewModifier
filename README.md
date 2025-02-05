@@ -1,6 +1,6 @@
 # OverTop Presentation View and ViewModifier
 
-![mac128](Images/mac128.png) This is the starter project for the video on creating an OverTop presentation view
+![mac128](Images/mac128.png) This is the completed source code for the video on creating an OverTop presentation view
 
 
 
