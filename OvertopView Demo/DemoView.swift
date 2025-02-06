@@ -18,12 +18,24 @@ import SwiftUI
 struct DemoView: View {
     @State private var currentSize = "medium"
     @State private var ageRange = "10 - 15"
+    @State private var bgColor:Color = .red
+    @State private var purchaseDate = Date.now
+    @State private var profile = Profile.sample
+    
     var body: some View {
         NavigationStack {
             ZStack{
-                Color.red.opacity(0.3)
+                bgColor.opacity(0.3)
                     .ignoresSafeArea()
                 VStack {
+                    VStack{
+                        Text(profile.firstName)
+                        Text(profile.lastName)
+                        Text(profile.email)
+                    }
+                    .font(.title2)
+                    .padding()
+                    .background(bgColor.opacity(0.2), in: RoundedRectangle(cornerRadius: 20))
                     Text(currentSize)
                         .padding()
                         .background(.blue, in: RoundedRectangle(cornerRadius: 10))
@@ -32,11 +44,16 @@ struct DemoView: View {
                         .padding()
                         .background(.green, in: RoundedRectangle(cornerRadius: 10))
                         .foregroundStyle(.white)
+                    LabeledContent("Purchase Date",
+                        value: purchaseDate,
+                        format: .dateTime.year().month().day()
+                    )
+                        .padding()
+                        .font(.title)
                     Spacer()
-                    
                 }
             }
-            .navigationTitle("OverTopViewDemo")
+            .navigationTitle("OverTopView Demo")
         }
     }
 }
