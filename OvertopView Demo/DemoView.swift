@@ -17,7 +17,11 @@ import SwiftUI
 
 struct DemoView: View {
     @State private var currentSize = "medium"
+    @State private var selectSize = false
+    
     @State private var ageRange = "10 - 15"
+    @State private var selectAgeRange = false
+    
     @State private var bgColor:Color = .red
     @State private var purchaseDate = Date.now
     @State private var profile = Profile.sample
@@ -40,10 +44,20 @@ struct DemoView: View {
                         .padding()
                         .background(.blue, in: RoundedRectangle(cornerRadius: 10))
                         .foregroundStyle(.white)
+                        .onTapGesture {
+                            withAnimation {
+                                selectSize = true
+                            }
+                        }
                     Text(ageRange)
                         .padding()
                         .background(.green, in: RoundedRectangle(cornerRadius: 10))
                         .foregroundStyle(.white)
+                        .onTapGesture {
+                            withAnimation {
+                                selectAgeRange = true
+                            }
+                        }
                     LabeledContent("Purchase Date",
                         value: purchaseDate,
                         format: .dateTime.year().month().day()
@@ -55,6 +69,31 @@ struct DemoView: View {
             }
             .navigationTitle("OverTopView Demo")
         }
+        .overTop(
+            showOverTop: selectSize,
+            overTopView: OverTopPickerView(
+                title: "Select Size",
+                choices: ["extra small", "small", "medium", "large", "large tall", "extra large", "extra large tall"],
+                current: currentSize,
+                showOverTop: $selectSize,
+                update: { update in
+                    currentSize = update
+                }
+            )
+        )
+        .overTop(
+            showOverTop: selectAgeRange,
+            overTopView: OverTopPickerView(
+                title: "Select Age Range",
+                choices: ["0 - 5", "6 - 10", "11 - 20", "21 - 30", "31 - 50", "50+"],
+                current: ageRange,
+                hasTwoButtons: true,
+                showOverTop: $selectAgeRange,
+                update: { newRange in
+                    ageRange = newRange
+                }
+            )
+        )
     }
 }
 
