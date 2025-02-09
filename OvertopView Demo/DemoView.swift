@@ -133,7 +133,7 @@ struct DemoView: View {
             overTopView: OverTopColorPickerView(
                 title: "Change Background Color",
                 choices:  [.red, .orange, .yellow, .green, .blue, .indigo, .purple],
-                current: .red,
+                current: bgColor,
                 showOverTop: $changeBackground,
                 update: { color in
                     bgColor = color
