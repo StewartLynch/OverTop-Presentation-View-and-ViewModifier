@@ -56,8 +56,8 @@ struct ProfileEditView: View, OverTopable {
                 VStack {
                     TextField("First Name", text: $updatedContent.firstName)
                         .focused($isFocused)
-                    TextField("First Name", text: $updatedContent.lastName)
-                    TextField("First Name", text: $updatedContent.email)
+                    TextField("Last Name", text: $updatedContent.lastName)
+                    TextField("Email Address", text: $updatedContent.email)
                         .keyboardType(.emailAddress)
                 }
                 .textFieldStyle(.roundedBorder)
