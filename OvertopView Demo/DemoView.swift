@@ -23,8 +23,13 @@ struct DemoView: View {
     @State private var selectAgeRange = false
     
     @State private var bgColor:Color = .red
-    @State private var purchaseDate = Date.now
+    @State private var changeBackground = false
+    
+    @State private var purchaseDate: Date?
+    @State private var changePurchaseDate = false
+    
     @State private var profile = Profile.sample
+    @State private var updateProfile = false
     
     var body: some View {
         NavigationStack {
@@ -36,10 +41,19 @@ struct DemoView: View {
                         Text(profile.firstName)
                         Text(profile.lastName)
                         Text(profile.email)
+                        Button {
+                            withAnimation {
+                                updateProfile = true
+                            }
+                        } label: {
+                            Image(systemName: "pencil.circle.fill")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .font(.title2)
                     .padding()
                     .background(bgColor.opacity(0.2), in: RoundedRectangle(cornerRadius: 20))
+                    .padding()
                     Text(currentSize)
                         .padding()
                         .background(.blue, in: RoundedRectangle(cornerRadius: 10))
@@ -58,13 +72,33 @@ struct DemoView: View {
                                 selectAgeRange = true
                             }
                         }
-                    LabeledContent("Purchase Date",
-                        value: purchaseDate,
-                        format: .dateTime.year().month().day()
-                    )
-                        .padding()
-                        .font(.title)
+                    Group {
+                        if let purchaseDate {
+                            LabeledContent("Purchase Date",
+                                           value: purchaseDate,
+                                           format: .dateTime.year().month().day()
+                            )
+                        } else {
+                            LabeledContent("Purchase Date", value: "Not Yet")
+                        }
+                    }
+                    .padding()
+                    .font(.title)
+                    .onTapGesture {
+                        withAnimation {
+                            changePurchaseDate = true
+                        }
+                    }
                     Spacer()
+                }
+            }
+            .toolbar {
+                Button {
+                    withAnimation {
+                        changeBackground = true
+                    }
+                } label: {
+                    Image(systemName: "gear")
                 }
             }
             .navigationTitle("OverTopView Demo")
@@ -91,6 +125,45 @@ struct DemoView: View {
                 showOverTop: $selectAgeRange,
                 update: { newRange in
                     ageRange = newRange
+                }
+            )
+        )
+        .overTop(
+            showOverTop: changeBackground,
+            overTopView: OverTopColorPickerView(
+                title: "Change Background Color",
+                choices:  [.red, .orange, .yellow, .green, .blue, .indigo, .purple],
+                current: .red,
+                showOverTop: $changeBackground,
+                update: { color in
+                    bgColor = color
+                }
+            )
+        )
+        .overTop(
+            showOverTop: updateProfile,
+            overTopView: ProfileEditView(
+                title: "Update Profile",
+                current: profile,
+                showOverTop: $updateProfile,
+                update: { update in
+                    profile = update
+                }
+            )
+        )
+        .overTop(
+            showOverTop: changePurchaseDate,
+            overTopView: EditPurchaseDateView(
+                title: "Purchase Date",
+                current: purchaseDate ?? Date.now,
+                hasTwoButtons: true,
+                showOverTop: $changePurchaseDate,
+                update: { newDate in
+                    if newDate == Date.distantPast {
+                        purchaseDate = nil
+                    } else {
+                        purchaseDate = newDate
+                    }
                 }
             )
         )

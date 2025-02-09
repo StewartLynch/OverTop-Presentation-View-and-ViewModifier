@@ -15,9 +15,9 @@
 
 import SwiftUI
 
-struct OverTopViewModifier: ViewModifier {
+struct OverTopViewModifier<T: OverTopable>: ViewModifier {
     let showOverTop: Bool
-    let overTopView: OverTopPickerView
+    let overTopView: T
     func body(content: Content) -> some View {
         ZStack{
             content
@@ -30,7 +30,7 @@ struct OverTopViewModifier: ViewModifier {
 }
 
 extension View {
-    func overTop(showOverTop: Bool, overTopView: OverTopPickerView) -> some View {
+    func overTop<T: OverTopable>(showOverTop: Bool, overTopView: T) -> some View {
         modifier(OverTopViewModifier(showOverTop: showOverTop, overTopView: overTopView))
     }
 }

@@ -1,7 +1,7 @@
 //
 //----------------------------------------------
 // Original project: OvertopView Demo
-// by  Stewart Lynch on 2025-02-06
+// by  Stewart Lynch on 2025-02-08
 //
 // Follow me on Mastodon: @StewartLynch@iosdev.space
 // Follow me on Threads: @StewartLynch (https://www.threads.net)
@@ -15,32 +15,34 @@
 
 import SwiftUI
 
-struct OverTopPickerView: View {
-    let title: String
-    let choices: [String]
-    let current: String
-    @State var updatedContent: String
-    let hasTwoButtons: Bool
+struct OverTopColorPickerView: View, OverTopable {
+    var title: String
+    var choices: [Color]
+    var current: Color
+    var hasTwoButtons: Bool
     @Binding var showOverTop: Bool
-    var update: (String) -> ()
-    
+    var update: (Color) -> ()
+
+    @State var updatedContent: Color
+
     init(
         title: String,
-        choices: [String],
-        current: String,
+        choices: [Color],
+        current: Color,
         hasTwoButtons: Bool = false,
         showOverTop: Binding<Bool>,
-        update: @escaping (String) -> Void
+        update: @escaping (Color) -> ()
     ) {
         self.title = title
         self.choices = choices
         self.current = current
-        self._updatedContent = State(initialValue: current)
         self.hasTwoButtons = hasTwoButtons
         self._showOverTop = showOverTop
+        self._updatedContent = State(initialValue: current)
         self.update = update
     }
-    
+
+
     var body: some View {
         ZStack {
             Color(.systemBackground).opacity(showOverTop ? 0.4 : 1)
@@ -53,12 +55,23 @@ struct OverTopPickerView: View {
             VStack {
                 Text(title)
                     .font(.title2)
-                Picker("Make Selection", selection: $updatedContent) {
-                    ForEach(choices, id: \.self) { choice in
-                        Text(choice)
+                // Edut content view
+                VStack {
+                    ForEach(choices, id: \.self) { color in
+                        color
+                            .frame(height: 30)
+                            .overlay(alignment: .trailing) {
+                                Image(systemName: color == updatedContent ? "checkmark.circle" : "circle")
+                                    .padding(.trailing)
+                                    .foregroundStyle(.white)
+                            }
+                            .onTapGesture {
+                                withAnimation {
+                                    updatedContent = color
+                                }
+                            }
                     }
                 }
-                .pickerStyle(.wheel)
                 HStack {
                     if hasTwoButtons {
                         Button("Cancel") {
@@ -90,14 +103,13 @@ struct OverTopPickerView: View {
 }
 
 #Preview {
-    OverTopPickerView(
-        title: "Select Size",
-        choices: ["extra small", "small", "medium", "large", "large tall", "extra large", "extra large tall"],
-        current: "medium",
-        hasTwoButtons: true,
+    OverTopColorPickerView(
+        title: "Choose a background color",
+        choices: [.red, .orange, .yellow, .green, .blue, .indigo, .purple],
+        current: .red,
         showOverTop: .constant(false),
         update: { update in
-            print(update)
+            
         }
     )
 }
