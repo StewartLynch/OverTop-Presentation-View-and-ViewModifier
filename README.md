@@ -1,7 +1,10 @@
 # OverTop Presentation View and ViewModifier
 
-![mac128](Images/mac128.png) This is the completed source code for the video on creating an OverTop presentation view
+![mac128](Images/mac128.png) This is the completed source code for the video on creating an OverTop presentation view and the starting source code for the second video in the series
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=4MnA5uhXiBw
+" target="_blank"><img src="http://img.youtube.com/vi/4MnA5uhXiBw/0.jpg" 
+alt="Part 2" width="480" height="360" border="1" /></a>
 
 
 If you want to support my work, you can - </br>
